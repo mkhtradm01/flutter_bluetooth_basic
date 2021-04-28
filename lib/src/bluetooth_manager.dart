@@ -11,13 +11,10 @@ class BluetoothManager {
   static const int CONNECTED = 1;
   static const int DISCONNECTED = 0;
 
-  static const MethodChannel _channel =
-      const MethodChannel('$NAMESPACE/methods');
-  static const EventChannel _stateChannel =
-      const EventChannel('$NAMESPACE/state');
+  static const MethodChannel _channel = const MethodChannel('$NAMESPACE/methods');
+  static const EventChannel _stateChannel = const EventChannel('$NAMESPACE/state');
   Stream<MethodCall> get _methodStream => _methodStreamController.stream;
-  final StreamController<MethodCall> _methodStreamController =
-      StreamController.broadcast();
+  final StreamController<MethodCall> _methodStreamController = StreamController.broadcast();
 
   BluetoothManager._() {
     _channel.setMethodCallHandler((MethodCall call) {
@@ -33,17 +30,14 @@ class BluetoothManager {
   // Future<bool> get isAvailable async =>
   //     await _channel.invokeMethod('isAvailable').then<bool>((d) => d);
 
-  // Future<bool> get isOn async =>
-  //     await _channel.invokeMethod('isOn').then<bool>((d) => d);
+  Future<bool> get isOn async => await _channel.invokeMethod('isOn').then<bool>((d) => d);
 
-  Future<bool> get isConnected async =>
-      await _channel.invokeMethod('isConnected');
+  Future<bool> get isConnected async => await _channel.invokeMethod('isConnected');
 
   BehaviorSubject<bool> _isScanning = BehaviorSubject.seeded(false);
   Stream<bool> get isScanning => _isScanning.stream;
 
-  BehaviorSubject<List<BluetoothDevice>> _scanResults =
-      BehaviorSubject.seeded([]);
+  BehaviorSubject<List<BluetoothDevice>> _scanResults = BehaviorSubject.seeded([]);
   Stream<List<BluetoothDevice>> get scanResults => _scanResults.stream;
 
   PublishSubject _stopScanPill = new PublishSubject();
@@ -124,8 +118,7 @@ class BluetoothManager {
     _isScanning.add(false);
   }
 
-  Future<dynamic> connect(BluetoothDevice device) =>
-      _channel.invokeMethod('connect', device.toJson());
+  Future<dynamic> connect(BluetoothDevice device) => _channel.invokeMethod('connect', device.toJson());
 
   Future<dynamic> disconnect() => _channel.invokeMethod('disconnect');
 
